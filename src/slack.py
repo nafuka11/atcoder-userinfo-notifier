@@ -55,9 +55,8 @@ def ac_ranking_blocks(userinfos: List[UserInfo]):
     max_point_digit = len(str(int(users[0]["rated_point_sum"])))
     for i, info in enumerate(users):
         fields.append({
-            "type": "plain_text",
-            "text": f":{NUM_DICT[i + 1]}:  {info['user_id']}",
-            "emoji": True
+            "type": "mrkdwn",
+            "text": f":{NUM_DICT[i + 1]}:  *{info['user_id']}*"
         })
         fields.append({
             "type": "mrkdwn",
