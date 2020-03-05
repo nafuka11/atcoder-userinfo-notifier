@@ -15,6 +15,6 @@ functions:
     memorySize: 128
     timeout: 100
     events:
-      - schedule: cron(4 2 * * ? *)
+      - schedule: cron(42 0 * * ? *)
     environment:
       SLACK_INCOMING_WEBHOOK_URL: ${ssm:/atcoder-userinfo-notifier/slack-url~true}
