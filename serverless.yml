@@ -1,0 +1,20 @@
+service: atcoder-userinfo-notifier
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: ap-northeast-1
+
+package:
+  exclude:
+    - userlist_example.txt
+
+functions:
+  atcoder-userinfo-notifier:
+    handler: handler.handle
+    memorySize: 128
+    timeout: 100
+    events:
+      - schedule: cron(4 2 * * ? *)
+    environment:
+      SLACK_INCOMING_WEBHOOK_URL: ${ssm:/atcoder-userinfo-notifier/slack-url~true}
