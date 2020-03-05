@@ -18,7 +18,9 @@ Pythonで書かれていて、AWS Lambda上で動きます。
 ### 手順
 1. Serverless Frameworkのインストール
    - [公式](https://github.com/serverless/serverless)のQuick Startの手順を実行してください。
+     
      <注意点>
+     
      - 手順2のVideoの内容は古いです。[ドキュメント](https://github.com/serverless/serverless/blob/master/docs/providers/aws/guide/credentials.md)を読みましょう。
      - ドキュメントにあるgistはssmの権限がないため、以下を`Action`に追加してください。
        ```json
@@ -43,6 +45,7 @@ Pythonで書かれていて、AWS Lambda上で動きます。
       mv userlist_example.txt userlist.txt
       ```
    2. `userlist.txt` の編集
+      
       - AtCoderのuseridを改行区切りで記入してください。末尾に改行は不要です。
 4. 動作確認
    - 以下のコマンドを実行し、Slackのチャンネルにメッセージが投稿されていることを確認します。
