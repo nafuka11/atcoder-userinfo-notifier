@@ -3,8 +3,6 @@ from typing import List
 from datetime import date
 import json
 import os
-from src.atcoder import UserInfo
-
 
 MAX_USER_COUNT = 5
 NUM_DICT = {
@@ -15,7 +13,8 @@ NUM_DICT = {
     5: "five"
 }
 
-def post_slack_from_userinfo(userinfos: List[UserInfo]):
+
+def post_slack_from_userinfo(userinfos: List):
     blocks = list()
     blocks.append(header_block())
     blocks += ac_ranking_blocks(userinfos)
@@ -35,7 +34,7 @@ def header_block():
     return block
 
 
-def ac_ranking_blocks(userinfos: List[UserInfo]):
+def ac_ranking_blocks(userinfos: List):
     blocks = list()
 
     # header
