@@ -2,9 +2,10 @@
 
 ## これは何？
 
-![screenshot](../images/screenshot.png?raw=true)
+<img src="https://github.com/nafuka11/atcoder-userinfo-notifier/blob/images/screenshot.png" width="510" alt="screenshot">
 
 特定ユーザのAtCoderの成績を毎日取得し、上位5人の成績をSlackに投稿するスクリプトです。
+
 Pythonで書かれていて、AWS Lambda上で動きます。
 
 ## 使い方
@@ -26,6 +27,7 @@ Pythonで書かれていて、AWS Lambda上で動きます。
        ```
 2. ssmの追加
    - AWSコンソール > AWS System Manager > パラメータストア > パラメータの作成
+
      各項目の値を以下のように設定し、`パラメータの作成` ボタン押下。
      |項目|値|
      |--|--|
@@ -49,6 +51,7 @@ Pythonで書かれていて、AWS Lambda上で動きます。
      ```
 5. serverless.ymlの編集
    - 初期設定では `04:02` にメッセージが投稿されます。
+
      変更したい場合は、 `schedule` を変更してください（外部APIにアクセスするので頻繁な設定はやめてね）。
 6. デプロイ
    -  ```bash
