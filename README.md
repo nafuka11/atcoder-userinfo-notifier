@@ -50,7 +50,7 @@ Pythonで書かれていて、AWS Lambda上で動きます。
      sls invoke local -f atcoder-userinfo-notifier
      ```
 5. serverless.ymlの編集
-   - 初期設定では `04:02` にメッセージが投稿されます。
+   - 初期設定では、日本時間の `09:42`（GMT 0:42）にメッセージが投稿されます。
 
      変更したい場合は、 `schedule` を変更してください（外部APIにアクセスするので頻繁な設定はやめてね）。
 6. デプロイ
