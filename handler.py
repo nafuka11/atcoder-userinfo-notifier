@@ -1,6 +1,6 @@
+from urllib import error
 from src.atcoder import fetch_atcoder_userinfo
 from src.slack import post_slack_from_userinfo
-from src.atcoder import UserInfo
 
 USER_LIST_FILE = "userlist.txt"
 
@@ -11,6 +11,6 @@ def handle(event, context):
         for line in f.readlines():
             try:
                 userinfos.append(fetch_atcoder_userinfo(line))
-            except Exception as e:
-                print(e)
+            except error.HTTPError as e:
+                print(f"[ERROR] {line}: {e}")
     post_slack_from_userinfo(userinfos)
