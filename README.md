@@ -4,9 +4,9 @@
 
 <img src="https://github.com/nafuka11/atcoder-userinfo-notifier/blob/images/screenshot.png" width="510" alt="screenshot">
 
-AtCoderの特定ユーザの成績（AC数、Rated Point Sum）を毎日取得し、AC数上位5人の成績をSlackに投稿するスクリプトです。
+AtCoderの特定ユーザの成績（AC数、Rated Point Sum）を毎日取得し、AC数上位5人の成績をSlackに投稿する、Pythonスクリプトです。
 
-Pythonで書かれていて、AWS Lambda上で動作します。
+AWS Lambda上で動作します。
 
 ユーザの成績の取得には、[AtCoder Problems](https://github.com/kenkoooo/AtCoderProblems/)のUserinfo APIを使用しています。
 
@@ -41,7 +41,7 @@ Pythonで書かれていて、AWS Lambda上で動作します。
      |利用枠|標準|
      |タイプ|安全な文字列|
      |KMS の主要なソース|現在のアカウント|
-     |KMS キー ID|（そのままでよい）|
+     |KMS キー ID|`alias/aws/ssm`|
      |値|（SlackのIncoming Webhook URL）|
 3. userlist.txtの編集
    1. `userlist_example.txt` を`userlist.txt` にリネーム
@@ -67,7 +67,7 @@ Pythonで書かれていて、AWS Lambda上で動作します。
      詳細な設定方法はAWSのドキュメントを参照してください。
        - [Rate または Cron を使用したスケジュール式 - AWS Lambda](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html)
 
-     ※ 外部APIにアクセスするので頻繁な設定はやめてください。
+     ※ 外部APIにアクセスするので頻繁な設定はくれぐれも控えてください。
 6. デプロイ
    -  ```bash
       sls deploy
