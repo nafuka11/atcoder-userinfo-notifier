@@ -4,7 +4,7 @@
 
 <img src="https://github.com/nafuka11/atcoder-userinfo-notifier/blob/images/screenshot.png" width="510" alt="screenshot">
 
-AtCoderの特定ユーザの成績を毎日取得し、AC数上位5人の成績をSlackに投稿するスクリプトです。
+AtCoderの特定ユーザの成績（AC数、Rated Point Sum）を毎日取得し、AC数上位5人の成績をSlackに投稿するスクリプトです。
 
 Pythonで書かれていて、AWS Lambda上で動作します。
 
@@ -33,7 +33,7 @@ Pythonで書かれていて、AWS Lambda上で動作します。
    - ssmにSlackのIncoming Webhook URLを追加します。
 
    - AWSコンソール > AWS System Manager > パラメータストア > パラメータの作成
-   
+
      各項目の値を以下のように設定し、`パラメータの作成` ボタン押下。
      |項目|値|
      |--|--|
@@ -45,13 +45,13 @@ Pythonで書かれていて、AWS Lambda上で動作します。
      |値|（SlackのIncoming Webhook URL）|
 3. userlist.txtの編集
    1. `userlist_example.txt` を`userlist.txt` にリネーム
-      
+
       ```bash
       mv userlist_example.txt userlist.txt
       ```
-   
+
    2. `userlist.txt` の編集
-   
+
       - AtCoderのuseridを改行区切りで記入してください。末尾に改行は不要です。
 4. 動作確認
    - 以下のコマンドを実行し、Slackのチャンネルにメッセージが投稿されることを確認します。
