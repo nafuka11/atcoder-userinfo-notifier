@@ -4,23 +4,25 @@
 
 <img src="https://github.com/nafuka11/atcoder-userinfo-notifier/blob/images/screenshot.png" width="510" alt="screenshot">
 
-特定ユーザのAtCoderの成績を毎日取得し、上位5人の成績をSlackに投稿するスクリプトです。
+AtCoderの特定ユーザの成績を毎日取得し、AC数上位5人の成績をSlackに投稿するスクリプトです。
 
-Pythonで書かれていて、AWS Lambda上で動きます。
+Pythonで書かれていて、AWS Lambda上で動作します。
+
+ユーザの成績の取得には、[AtCoder Problems](https://github.com/kenkoooo/AtCoderProblems/)のUserinfo APIを使用しています。
 
 ## 使い方
 
 ### 必要物
 - AWSアカウント
-- Node.js
+- Node.js バージョン6以上
 - SlackのIncoming Webhook URL
 
 ### 手順
 1. Serverless Frameworkのインストール
-   - [公式](https://github.com/serverless/serverless)のQuick Startの手順を実行してください。
-     
+   - [Serverless Framework公式](https://github.com/serverless/serverless)の[Quick Start](https://github.com/serverless/serverless#quick-start)の手順を実行してください。
+
      <注意点>
-     
+
      - 手順2のVideoの内容は古いです。[ドキュメント](https://github.com/serverless/serverless/blob/master/docs/providers/aws/guide/credentials.md)を読みましょう。
      - ドキュメントにあるgistはssmの権限がないため、以下を`Action`に追加してください。
        ```json
@@ -28,8 +30,10 @@ Pythonで書かれていて、AWS Lambda上で動きます。
        "ssm:GetParameter"
        ```
 2. ssmの追加
-   - AWSコンソール > AWS System Manager > パラメータストア > パラメータの作成
+   - ssmにSlackのIncoming Webhook URLを追加します。
 
+   - AWSコンソール > AWS System Manager > パラメータストア > パラメータの作成
+   
      各項目の値を以下のように設定し、`パラメータの作成` ボタン押下。
      |項目|値|
      |--|--|
@@ -40,22 +44,30 @@ Pythonで書かれていて、AWS Lambda上で動きます。
      |KMS キー ID|（そのままでよい）|
      |値|（SlackのIncoming Webhook URL）|
 3. userlist.txtの編集
-   1. `userlist_example.txt` をリネーム
+   1. `userlist_example.txt` を`userlist.txt` にリネーム
+      
       ```bash
       mv userlist_example.txt userlist.txt
       ```
+   
    2. `userlist.txt` の編集
-      
+   
       - AtCoderのuseridを改行区切りで記入してください。末尾に改行は不要です。
 4. 動作確認
-   - 以下のコマンドを実行し、Slackのチャンネルにメッセージが投稿されていることを確認します。
+   - 以下のコマンドを実行し、Slackのチャンネルにメッセージが投稿されることを確認します。
      ```bash
      sls invoke local -f atcoder-userinfo-notifier
      ```
 5. serverless.ymlの編集
-   - 初期設定では、日本時間の `09:42`（GMT 0:42）にメッセージが投稿されます。
+   - `- schedule: ` の行を編集することで、通知時刻を変更できます。
+     例：UTC 0:42（JST 9:42）に通知する場合
+     ```
+     - schedule: cron(42 0 * * ? *)
+     ```
+     詳細な設定方法はAWSのドキュメントを参照してください。
+       - [Rate または Cron を使用したスケジュール式 - AWS Lambda](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html)
 
-     変更したい場合は、 `schedule` を変更してください（外部APIにアクセスするので頻繁な設定はやめてね）。
+     ※ 外部APIにアクセスするので頻繁な設定はやめてください。
 6. デプロイ
    -  ```bash
       sls deploy
