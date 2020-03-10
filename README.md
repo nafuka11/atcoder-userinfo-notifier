@@ -60,6 +60,7 @@ AWS Lambda上で動作します。
      ```
 5. serverless.ymlの編集
    - `- schedule: ` の行を編集することで、通知時刻を変更できます。
+
      例：UTC 0:42（JST 9:42）に通知する場合
      ```
      - schedule: cron(42 0 * * ? *)
