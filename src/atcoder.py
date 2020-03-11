@@ -16,15 +16,14 @@ class UserInfo:
     rated_point_sum_rank: int
 
 
-
-def fetch_atcoder_userinfo(userid: str) -> UserInfo:
+def fetch_atcoder_userinfo(userid: str) -> dict:
     """useridからuserinfoを取得する
 
     Args:
         userid (str): AtCoderのuserid
 
     Returns:
-        UserInfo: userinfo
+        dict: userinfo
 
     """
     headers = {
