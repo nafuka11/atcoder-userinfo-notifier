@@ -16,11 +16,17 @@ NUM_DICT = {
 
 def post_slack_from_userinfo(userinfos: List[dict]) -> None:
     """SlackにAtCoderの成績ランキングを投稿する"""
+    message = create_slack_message(userinfos)
+    post_message(message)
+
+
+def create_slack_message(userinfos: List[dict]) -> dict:
+    """Slackに投稿するメッセージを返す"""
     blocks = list()
     blocks.append(header_block())
     blocks += ac_ranking_blocks(userinfos)
     blocks.append(footer_block())
-    post_message(blocks)
+    return {"blocks": blocks}
 
 
 def header_block() -> dict:
@@ -85,9 +91,9 @@ def footer_block() -> dict:
     return block
 
 
-def post_message(blocks: List[dict]) -> None:
+def post_message(message: dict) -> None:
     """Slackに指定したblocksをメッセージとして投稿する"""
-    data = json.dumps({"blocks": blocks}).encode()
+    data = json.dumps(message).encode()
     headers = {"Content-type": "application/json"}
     req = request.Request(
         url=os.getenv("SLACK_INCOMING_WEBHOOK_URL"),
