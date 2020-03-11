@@ -14,24 +14,24 @@ NUM_DICT = {
 }
 
 
-def post_slack_from_userinfo(userinfos: List[dict]) -> None:
+def post_slack_from_userinfo(userinfos: List[dict], now_date: date) -> None:
     """SlackにAtCoderの成績ランキングを投稿する"""
-    message = create_slack_message(userinfos)
+    message = create_slack_message(userinfos, now_date)
     post_message(message)
 
 
-def create_slack_message(userinfos: List[dict]) -> dict:
+def create_slack_message(userinfos: List[dict], now_date: date) -> dict:
     """Slackに投稿するメッセージを返す"""
     blocks = list()
-    blocks.append(header_block())
+    blocks.append(header_block(now_date))
     blocks += ac_ranking_blocks(userinfos)
     blocks.append(footer_block())
     return {"blocks": blocks}
 
 
-def header_block() -> dict:
+def header_block(now_date: date) -> dict:
     """Slackに投稿するメッセージのヘッダ部を返す"""
-    today_str = date.today().strftime("%Y/%m/%d")
+    today_str = now_date.strftime("%Y/%m/%d")
     block = {
         "type": "section",
         "text": {

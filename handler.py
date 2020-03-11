@@ -1,4 +1,5 @@
 from urllib import error
+from datetime import date
 from src.atcoder import fetch_atcoder_userinfo
 from src.slack import post_slack_from_userinfo
 
@@ -13,4 +14,4 @@ def handle(event, context):
                 userinfos.append(fetch_atcoder_userinfo(line))
             except error.HTTPError as e:
                 print(f"[ERROR] {line}: {e}")
-    post_slack_from_userinfo(userinfos)
+    post_slack_from_userinfo(userinfos, date.today())
