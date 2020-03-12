@@ -25,11 +25,6 @@ class TestFetchAtcoderUserinfos:
     params_http_error = {
         "1 error in 3 users": (
             [
-                "user_id1",
-                "user_id2",
-                "user_id3"
-            ],
-            [
                 {
                     "user_id": "user_id1",
                     "accepted_count": 1,
@@ -47,10 +42,10 @@ class TestFetchAtcoderUserinfos:
         )
     }
 
-    @pytest.mark.parametrize("userids, expected",
+    @pytest.mark.parametrize("expected",
                              params_http_error.values(),
                              ids=list(params_http_error.keys()))
-    def test_http_error(self, mocker, userids, expected):
+    def test_http_error(self, mocker, expected, userid_file):
         """If HTTPError raises, the function should not get dict"""
         def mock_fetch_atcoder_userinfo(userid):
             """The function for fetch_atcoder_userinfo()"""
@@ -66,9 +61,13 @@ class TestFetchAtcoderUserinfos:
             return userinfo
 
         mocker.patch("src.main.fetch_atcoder_userinfo", side_effect=mock_fetch_atcoder_userinfo)
-        mocker.patch("src.main.read_userid_list", return_value=userids)
-        actual = fetch_atcoder_userinfos("dummy.txt")
+        actual = fetch_atcoder_userinfos(userid_file)
         assert actual == expected
+
+    def test_file_not_found(self):
+        """The function should returns empty list if userid file is not found"""
+        actual = fetch_atcoder_userinfos("not_found_file.txt")
+        assert actual == list()
 
 
 class TestReadUseridList:
