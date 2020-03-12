@@ -12,8 +12,33 @@ def mock_slack_api(mocker, monkeypatch):
 
 
 class TestPostSlackFromUserinfo:
-    def test_no_userinfo(self):
-        pass
+    def test_no_userinfo(self, mock_slack_api):
+        """The function should not call urlopen() if userinfos is empty"""
+        userinfo = list()
+        now_date = date(2222, 4, 2)
+        post_slack_from_userinfo(userinfo, now_date)
+
+        assert not mock_slack_api.called
+
+    def test_userinfos(self, mock_slack_api):
+        """The function should call urlopen() if len(userinfos) > 0"""
+        userinfo = [{
+                "user_id": "user_id1",
+                "accepted_count": 1234,
+                "accepted_count_rank": 2345,
+                "rated_point_sum": 345678.0,
+                "rated_point_sum_rank": 4567
+        }, {
+                "user_id": "user_id2",
+                "accepted_count": 123456,
+                "accepted_count_rank": 2345,
+                "rated_point_sum": 345678.0,
+                "rated_point_sum_rank": 4567
+        }]
+        now_date = date(2222, 4, 2)
+        post_slack_from_userinfo(userinfo, now_date)
+
+        assert mock_slack_api.call_count == 1
 
 
 class TestCreateSlackMessage:
