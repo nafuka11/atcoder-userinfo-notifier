@@ -15,6 +15,12 @@ user_id3
     return str(file)
 
 
+@pytest.fixture
+def mock_time_sleep(mocker):
+    mocker.patch("time.sleep")
+
+
+@pytest.mark.usefixtures("mock_time_sleep")
 class TestFetchAtcoderUserinfos:
     params_http_error = {
         "1 error in 3 users": (
