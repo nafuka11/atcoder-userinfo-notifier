@@ -1,7 +1,6 @@
 from urllib import request
 import gzip
 import json
-import time
 from dataclasses import dataclass
 
 ATCODER_ENDPOINT_URL = "https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user="
@@ -33,6 +32,5 @@ def fetch_atcoder_userinfo(userid: str) -> dict:
                           headers=headers)
     res = request.urlopen(req)
     data = gzip.decompress(res.read())
-    time.sleep(1)
 
     return json.loads(data)
