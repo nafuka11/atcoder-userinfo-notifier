@@ -12,7 +12,7 @@ user_id1
 user_id2
 user_id3
 """)
-    return file.strpath
+    return str(file)
 
 
 class TestFetchAtcoderUserinfos:
