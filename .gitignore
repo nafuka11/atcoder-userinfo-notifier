@@ -23,5 +23,6 @@ __pycache__/
 
 # IDE setting files
 .idea/
+.vscode/
 
 userlist.txt
