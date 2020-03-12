@@ -16,6 +16,10 @@ NUM_DICT = {
 
 def post_slack_from_userinfo(userinfos: List[dict], now_date: date) -> None:
     """SlackにAtCoderの成績ランキングを投稿する"""
+    # ユーザが存在しない場合は、投稿しない
+    if len(userinfos) == 0:
+        return
+
     message = create_slack_message(userinfos, now_date)
     post_message(message)
 
