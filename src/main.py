@@ -8,7 +8,10 @@ from src.slack import post_slack_from_userinfo
 
 def main(user_list_file: str) -> None:
     userinfos = fetch_atcoder_userinfos(user_list_file)
-    post_slack_from_userinfo(userinfos, date.today())
+    try:
+        post_slack_from_userinfo(userinfos, date.today())
+    except error.HTTPError as e:
+        print(f"[ERROR] Failed to post a message to slack: {e}")
 
 
 def fetch_atcoder_userinfos(user_list_file: str) -> List[dict]:
