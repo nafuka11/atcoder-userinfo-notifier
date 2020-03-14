@@ -37,7 +37,7 @@ def mock_time_sleep(mocker: MockFixture) -> None:
 
 @pytest.mark.usefixtures("mock_time_sleep")
 class TestFetchAtcoderUserinfos:
-    """fetch_atcoder_userinfos()のテスト"""
+    """fetch_atcoder_userinfos()の正常系テスト"""
 
     params_http_error = {
         "1 error in 3 users": (
@@ -95,7 +95,7 @@ class TestFetchAtcoderUserinfos:
 
 
 class TestReadUseridList:
-    """read_userid_list()のテスト"""
+    """read_userid_list()の正常系テスト"""
 
     def test_equivant(self, userid_file: str):
         """指定されたパスからuseridのリストを返すことの確認
@@ -107,6 +107,10 @@ class TestReadUseridList:
         expected = ["user_id1", "user_id2", "user_id3"]
         actual = read_userid_list(userid_file)
         assert actual == expected
+
+
+class TestReadUseridListException:
+    """read_userid_list()の異常系テスト"""
 
     def test_file_not_found(self):
         """指定されたパスが存在しない場合、FileNotFoundErrorがraiseされることの確認"""

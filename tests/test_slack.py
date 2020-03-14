@@ -24,7 +24,7 @@ def mock_slack_api(mocker: MockFixture, monkeypatch: MonkeyPatch) -> MagicMock:
 
 
 class TestPostSlackFromUserinfo:
-    """post_slack_from_userinfo()のテスト"""
+    """post_slack_from_userinfo()の正常系テスト"""
 
     def test_no_userinfo(self, mock_slack_api: MagicMock):
         """userinfosが空のリストのとき、urlopen()が呼び出されない(=Slackにメッセージが投稿されない)ことの確認
@@ -65,7 +65,7 @@ class TestPostSlackFromUserinfo:
 
 
 class TestCreateSlackMessage:
-    """create_slack_message()のテスト"""
+    """create_slack_message()の正常系テスト"""
 
     params_userinfo = {
         "1 userinfo": (
@@ -233,7 +233,7 @@ class TestCreateSlackMessage:
 
 
 class TestPostMessage:
-    """post_message()のテスト"""
+    """post_message()の正常系テスト"""
 
     def test_equivant(self, mock_slack_api: MagicMock):
         """urlopen()が呼び出され、渡されるパラメータが正しいことの確認

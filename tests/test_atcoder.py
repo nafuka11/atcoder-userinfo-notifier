@@ -38,7 +38,7 @@ def atcoder_api_request_invalid(mocker: MockFixture) -> None:
 
 
 class TestFetchAtcoderUserinfo:
-    """fetch_atcoder_userinfo()のテスト"""
+    """fetch_atcoder_userinfo()の正常系テスト"""
 
     def test_equivant(self, atcoder_api_request_valid: None):
         """APIから取得したgzip圧縮JSONを解凍し、dictとして返すことの確認
@@ -56,6 +56,10 @@ class TestFetchAtcoderUserinfo:
             "rated_point_sum_rank": 4567
         }
         assert actual == expected
+
+
+class TestFetchAtcoderUserinfoException:
+    """fetch_atcoder_userinfo()の異常系テスト"""
 
     def test_error(self, atcoder_api_request_invalid: None):
         """HTTPErrorが発生したとき、そのままraiseされることの確認
