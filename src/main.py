@@ -1,4 +1,4 @@
-from urllib import error
+from urllib.error import HTTPError
 from datetime import date
 import time
 from typing import List
@@ -10,7 +10,7 @@ def main(user_list_file: str) -> None:
     userinfos = fetch_atcoder_userinfos(user_list_file)
     try:
         post_slack_from_userinfo(userinfos, date.today())
-    except error.HTTPError as e:
+    except HTTPError as e:
         print(f"[ERROR] Failed to post a message to slack: {e}")
 
 
@@ -27,7 +27,7 @@ def fetch_atcoder_userinfos(user_list_file: str) -> List[dict]:
             userinfos.append(fetch_atcoder_userinfo(userid))
             # APIアクセスのたびに1秒Sleepする
             time.sleep(1)
-        except error.HTTPError as e:
+        except HTTPError as e:
             print(f"[ERROR] {userid}: {e}")
     return userinfos
 
