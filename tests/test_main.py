@@ -1,9 +1,11 @@
 import pytest
+from py._path.local import LocalPath
+from pytest_mock import MockFixture
 from src.main import *
 
 
 @pytest.fixture
-def userid_file(tmpdir):
+def userid_file(tmpdir: LocalPath) -> str:
     """Returns userid list filepath"""
     file = tmpdir / "test_file.txt"
     file.write("""
@@ -15,7 +17,7 @@ user_id3
 
 
 @pytest.fixture
-def mock_time_sleep(mocker):
+def mock_time_sleep(mocker: MockFixture) -> None:
     mocker.patch("time.sleep")
 
 
@@ -44,9 +46,9 @@ class TestFetchAtcoderUserinfos:
     @pytest.mark.parametrize("expected",
                              params_http_error.values(),
                              ids=list(params_http_error.keys()))
-    def test_http_error(self, mocker, expected, userid_file):
+    def test_http_error(self, mocker: MockFixture, expected: dict, userid_file: str):
         """If HTTPError raises, the function should not get dict"""
-        def mock_fetch_atcoder_userinfo(userid):
+        def mock_fetch_atcoder_userinfo(userid: str) -> dict:
             """The function for fetch_atcoder_userinfo()"""
             if userid == "user_id2":
                 raise HTTPError("http://example.com", 500, "Internal Server Error", None, None)
@@ -70,7 +72,7 @@ class TestFetchAtcoderUserinfos:
 
 
 class TestReadUseridList:
-    def test_equivant(self, userid_file):
+    def test_equivant(self, userid_file: str):
         """Make sure the function returns a correct user_id list"""
         expected = ["user_id1", "user_id2", "user_id3"]
         actual = read_userid_list(userid_file)

@@ -1,9 +1,12 @@
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
+from pytest_mock import MockFixture
+from unittest.mock import MagicMock
 from src.slack import *
 
 
 @pytest.fixture()
-def mock_slack_api(mocker, monkeypatch):
+def mock_slack_api(mocker: MockFixture, monkeypatch: MonkeyPatch) -> MagicMock:
     """Set environment variable and mock urlopen()"""
     monkeypatch.setenv("SLACK_INCOMING_WEBHOOK_URL",
                        "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX")
@@ -12,7 +15,7 @@ def mock_slack_api(mocker, monkeypatch):
 
 
 class TestPostSlackFromUserinfo:
-    def test_no_userinfo(self, mock_slack_api):
+    def test_no_userinfo(self, mock_slack_api: MagicMock):
         """The function should not call urlopen() if userinfos is empty"""
         userinfo = list()
         now_date = date(2222, 4, 2)
@@ -20,7 +23,7 @@ class TestPostSlackFromUserinfo:
 
         assert not mock_slack_api.called
 
-    def test_userinfos(self, mock_slack_api):
+    def test_userinfos(self, mock_slack_api: MagicMock):
         """The function should call urlopen() if len(userinfos) > 0"""
         userinfo = [{
                 "user_id": "user_id1",
@@ -194,14 +197,14 @@ class TestCreateSlackMessage:
     @pytest.mark.parametrize("userinfos, now_date, expected",
                              params_userinfo.values(),
                              ids=list(params_userinfo.keys()))
-    def test_userinfo(self, userinfos, now_date, expected):
+    def test_userinfo(self, userinfos: List[dict], now_date: date, expected: dict):
         """create_slack_message() returns a correct message"""
         actual = create_slack_message(userinfos, now_date)
         assert actual == expected
 
 
 class TestPostMessage:
-    def test_equivant(self, mock_slack_api):
+    def test_equivant(self, mock_slack_api: MagicMock):
         """post_message() calls urlopen() and call_args is correct"""
         message = {"data": "messages"}
 

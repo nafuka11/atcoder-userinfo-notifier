@@ -2,11 +2,12 @@ import pytest
 import gzip
 import json
 from urllib.error import HTTPError
+from pytest_mock import MockFixture
 from src.atcoder import fetch_atcoder_userinfo
 
 
 @pytest.fixture
-def atcoder_api_request_valid(mocker):
+def atcoder_api_request_valid(mocker: MockFixture) -> None:
     """urllib.request.urlopen().read() returns gzip-compressed json"""
     response_dict = {
         "user_id": "user_id",
@@ -20,14 +21,14 @@ def atcoder_api_request_valid(mocker):
 
 
 @pytest.fixture
-def atcoder_api_request_invalid(mocker):
+def atcoder_api_request_invalid(mocker: MockFixture) -> None:
     """urllib.request.urlopen() throws HTTPError"""
     error = HTTPError("http://example.com", 500, "Internal Server Error", None, None)
     mocker.patch("urllib.request.urlopen", side_effect=error)
 
 
 class TestFetchAtcoderUserinfo:
-    def test_equivant(self, atcoder_api_request_valid):
+    def test_equivant(self, atcoder_api_request_valid: None):
         """Make sure API response is decompressed
            and decompressed object is correct dict"""
         actual = fetch_atcoder_userinfo("user_id")
@@ -40,7 +41,7 @@ class TestFetchAtcoderUserinfo:
         }
         assert actual == expected
 
-    def test_error(self, atcoder_api_request_invalid):
+    def test_error(self, atcoder_api_request_invalid: None):
         """<invalid_user_id> throws HTTPError"""
         with pytest.raises(HTTPError):
             fetch_atcoder_userinfo("invalid_user_id")
