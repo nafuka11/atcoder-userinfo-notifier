@@ -6,7 +6,15 @@ from src.main import *
 
 @pytest.fixture
 def userid_file(tmpdir: LocalPath) -> str:
-    """Returns userid list filepath"""
+    """useridlistファイルのパス文字列を返す
+
+    Args:
+        tmpdir (LocalPath): tmpdirフィクスチャ
+
+    Returns:
+        str: useridlistファイルのパス文字列
+
+    """
     file = tmpdir / "test_file.txt"
     file.write("""
 user_id1
@@ -18,11 +26,19 @@ user_id3
 
 @pytest.fixture
 def mock_time_sleep(mocker: MockFixture) -> None:
+    """テスト中sleepしないよう、time.sleep()をモックする
+
+    Args:
+        mocker (MockFixture): モックフィクスチャ
+
+    """
     mocker.patch("time.sleep")
 
 
 @pytest.mark.usefixtures("mock_time_sleep")
 class TestFetchAtcoderUserinfos:
+    """fetch_atcoder_userinfos()のテスト"""
+
     params_http_error = {
         "1 error in 3 users": (
             [
@@ -46,8 +62,15 @@ class TestFetchAtcoderUserinfos:
     @pytest.mark.parametrize("expected",
                              params_http_error.values(),
                              ids=list(params_http_error.keys()))
-    def test_http_error(self, mocker: MockFixture, expected: dict, userid_file: str):
-        """If HTTPError raises, the function should not get dict"""
+    def test_http_error(self, mocker: MockFixture, expected: List[dict], userid_file: str):
+        """Userinfo取得でHTTPErrorが発生した場合、エラーをraiseせず処理を続行することの確認
+
+        Args:
+            mocker (MockFixture): モックフィクスチャ
+            expected (List[dict]): 想定される戻り値。userinfoのリスト
+            userid_file (str): useridlistファイルのパス文字列
+
+        """
         def mock_fetch_atcoder_userinfo(userid: str) -> dict:
             """The function for fetch_atcoder_userinfo()"""
             if userid == "user_id2":
@@ -66,19 +89,26 @@ class TestFetchAtcoderUserinfos:
         assert actual == expected
 
     def test_file_not_found(self):
-        """The function should returns empty list if userid file is not found"""
+        """useridlistファイルが見つからなかったとき、空のlistを返すことの確認"""
         actual = fetch_atcoder_userinfos("not_found_file.txt")
         assert actual == list()
 
 
 class TestReadUseridList:
+    """read_userid_list()のテスト"""
+
     def test_equivant(self, userid_file: str):
-        """Make sure the function returns a correct user_id list"""
+        """指定されたパスからuseridのリストを返すことの確認
+
+        Args:
+            userid_file (str): useridlistファイルのパス文字列
+
+        """
         expected = ["user_id1", "user_id2", "user_id3"]
         actual = read_userid_list(userid_file)
         assert actual == expected
 
     def test_file_not_found(self):
-        """If userid file is not found, raises FileNotFoundError"""
+        """指定されたパスが存在しない場合、FileNotFoundErrorがraiseされることの確認"""
         with pytest.raises(FileNotFoundError):
             read_userid_list("not_found_file.txt")

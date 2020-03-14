@@ -8,7 +8,12 @@ from src.atcoder import fetch_atcoder_userinfo
 
 @pytest.fixture
 def atcoder_api_request_valid(mocker: MockFixture) -> None:
-    """urllib.request.urlopen().read() returns gzip-compressed json"""
+    """urllib.request.urlopen()をモック。当該関数コール時にresponse_dictを返す
+
+    Args:
+        mocker (MockFixture): モックフィクスチャ
+
+    """
     response_dict = {
         "user_id": "user_id",
         "accepted_count": 123456,
@@ -22,15 +27,26 @@ def atcoder_api_request_valid(mocker: MockFixture) -> None:
 
 @pytest.fixture
 def atcoder_api_request_invalid(mocker: MockFixture) -> None:
-    """urllib.request.urlopen() throws HTTPError"""
+    """urllib.request.urlopen()をモック。当該関数コール時にHTTPErrorをraiseする
+
+    Args:
+        mocker (MockFixture): モックフィクスチャ
+
+    """
     error = HTTPError("http://example.com", 500, "Internal Server Error", None, None)
     mocker.patch("urllib.request.urlopen", side_effect=error)
 
 
 class TestFetchAtcoderUserinfo:
+    """fetch_atcoder_userinfo()のテスト"""
+
     def test_equivant(self, atcoder_api_request_valid: None):
-        """Make sure API response is decompressed
-           and decompressed object is correct dict"""
+        """APIから取得したgzip圧縮JSONを解凍し、dictとして返すことの確認
+
+        Args:
+            atcoder_api_request_valid (None): urlopen()をモックするフィクスチャ
+
+        """
         actual = fetch_atcoder_userinfo("user_id")
         expected = {
             "user_id": "user_id",
@@ -42,6 +58,11 @@ class TestFetchAtcoderUserinfo:
         assert actual == expected
 
     def test_error(self, atcoder_api_request_invalid: None):
-        """<invalid_user_id> throws HTTPError"""
+        """HTTPErrorが発生したとき、そのままraiseされることの確認
+
+        Args:
+            atcoder_api_request_invalid (None): urlopen()をモックするフィクスチャ。
+
+        """
         with pytest.raises(HTTPError):
             fetch_atcoder_userinfo("invalid_user_id")
