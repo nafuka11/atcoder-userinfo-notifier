@@ -14,16 +14,28 @@ NUM_DICT = {
 }
 
 
-def post_slack_from_userinfo(userinfos: List):
+def post_slack_from_userinfo(userinfos: List[dict], now_date: date) -> None:
+    """SlackにAtCoderの成績ランキングを投稿する"""
+    # ユーザが存在しない場合は、投稿しない
+    if len(userinfos) == 0:
+        return
+
+    message = create_slack_message(userinfos, now_date)
+    post_message(message)
+
+
+def create_slack_message(userinfos: List[dict], now_date: date) -> dict:
+    """Slackに投稿するメッセージを返す"""
     blocks = list()
-    blocks.append(header_block())
+    blocks.append(header_block(now_date))
     blocks += ac_ranking_blocks(userinfos)
     blocks.append(footer_block())
-    post_message(blocks)
+    return {"blocks": blocks}
 
 
-def header_block():
-    today_str = date.today().strftime("%Y/%m/%d")
+def header_block(now_date: date) -> dict:
+    """Slackに投稿するメッセージのヘッダ部を返す"""
+    today_str = now_date.strftime("%Y/%m/%d")
     block = {
         "type": "section",
         "text": {
@@ -34,7 +46,8 @@ def header_block():
     return block
 
 
-def ac_ranking_blocks(userinfos: List):
+def ac_ranking_blocks(userinfos: List[dict]) -> List[dict]:
+    """Slackに投稿するメッセージのAC数ランキング部分を返す"""
     blocks = list()
 
     # header
@@ -69,7 +82,8 @@ def ac_ranking_blocks(userinfos: List):
     return blocks
 
 
-def footer_block():
+def footer_block() -> dict:
+    """Slackに投稿するメッセージのフッタ部を返す"""
     block = {
         "type": "section",
         "text": {
@@ -81,8 +95,9 @@ def footer_block():
     return block
 
 
-def post_message(blocks):
-    data = json.dumps({"blocks": blocks}).encode()
+def post_message(message: dict) -> None:
+    """Slackに指定したblocksをメッセージとして投稿する"""
+    data = json.dumps(message).encode()
     headers = {"Content-type": "application/json"}
     req = request.Request(
         url=os.getenv("SLACK_INCOMING_WEBHOOK_URL"),

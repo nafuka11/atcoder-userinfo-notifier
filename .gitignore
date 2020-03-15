@@ -16,11 +16,13 @@ var/
 .installed.cfg
 *.egg
 __pycache__/
+.venv/
 
 # Serverless directories
 .serverless
 
 # IDE setting files
 .idea/
+.vscode/
 
 userlist.txt
