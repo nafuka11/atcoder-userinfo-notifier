@@ -12,7 +12,7 @@ NUM_DICT = {
     4: "four",
     5: "five"
 }
-
+SLACK_URL_ENV_NAME = "SLACK_INCOMING_WEBHOOK_URL"
 
 def post_slack_from_userinfo(userinfos: List[dict], now_date: date) -> None:
     """SlackにAtCoderの成績ランキングを投稿する"""
@@ -99,8 +99,12 @@ def post_message(message: dict) -> None:
     """Slackに指定したblocksをメッセージとして投稿する"""
     data = json.dumps(message).encode()
     headers = {"Content-type": "application/json"}
+    url = os.getenv(SLACK_URL_ENV_NAME)
+    if url is None:
+        print(f"[ERROR] Environment variable does not exist: {SLACK_URL_ENV_NAME}")
+        return
     req = request.Request(
-        url=os.getenv("SLACK_INCOMING_WEBHOOK_URL"),
+        url=url,
         data=data,
         headers=headers)
     request.urlopen(req)
