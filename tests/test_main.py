@@ -1,22 +1,22 @@
 import pytest
-from py._path.local import LocalPath
+from pathlib import Path
 from pytest_mock import MockFixture
 from src.main import *
 
 
 @pytest.fixture
-def userid_file(tmpdir: LocalPath) -> str:
+def userid_file(tmp_path: Path) -> str:
     """useridlistファイルのパス文字列を返す
 
     Args:
-        tmpdir (LocalPath): tmpdirフィクスチャ
+        tmp_path (Path): tmp_pathフィクスチャ
 
     Returns:
         str: useridlistファイルのパス文字列
 
     """
-    file = tmpdir / "test_file.txt"
-    file.write("""
+    file = tmp_path / "test_file.txt"
+    file.write_text("""
 user_id1
 user_id2
 user_id3
