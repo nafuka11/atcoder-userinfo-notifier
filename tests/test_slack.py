@@ -33,7 +33,7 @@ class TestPostSlackFromUserinfo:
             mock_slack_api (MagicMock): urlopen()のモックオブジェクト
 
         """
-        userinfo = list()
+        userinfo: List[dict] = list()
         now_date = date(2222, 4, 2)
         post_slack_from_userinfo(userinfo, now_date)
 
@@ -250,3 +250,21 @@ class TestPostMessage:
         assert actual.get_full_url() == "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
         assert actual.get_header("Content-type") == "application/json"
         assert actual.data == json.dumps(message).encode()
+
+
+class TestPostMessageException:
+    """post_message()の異常系テスト"""
+
+    def test_no_env(self, mock_slack_api: MagicMock, monkeypatch: MonkeyPatch):
+        """環境変数が未設定の時、urlopen()が呼び出されないことの確認
+
+        Args:
+            mock_slack_api (MagicMock): urlopen()のモックオブジェクト
+            monkeypatch (MonkeyPatch): monkeypatchフィクスチャ
+
+        """
+        monkeypatch.delenv("SLACK_INCOMING_WEBHOOK_URL")
+        message = {"data": "messages"}
+
+        post_message(message)
+        assert not mock_slack_api.called

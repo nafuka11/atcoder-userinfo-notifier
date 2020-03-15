@@ -12,7 +12,7 @@ NUM_DICT = {
     4: "four",
     5: "five"
 }
-
+SLACK_URL_ENV_NAME = "SLACK_INCOMING_WEBHOOK_URL"
 
 def post_slack_from_userinfo(userinfos: List[dict], now_date: date) -> None:
     """SlackにAtCoderの成績ランキングを投稿する"""
@@ -48,7 +48,7 @@ def header_block(now_date: date) -> dict:
 
 def ac_ranking_blocks(userinfos: List[dict]) -> List[dict]:
     """Slackに投稿するメッセージのAC数ランキング部分を返す"""
-    blocks = list()
+    blocks: List[dict] = list()
 
     # header
     block = {
@@ -61,7 +61,7 @@ def ac_ranking_blocks(userinfos: List[dict]) -> List[dict]:
     blocks.append(block)
 
     # user ranking
-    fields = list()
+    fields: List[dict] = list()
     users = sorted(userinfos, key=lambda u: u["accepted_count"], reverse=True)[:MAX_USER_COUNT]
     max_ac_digit = len(str(users[0]["accepted_count"]))
     max_point_digit = len(str(int(users[0]["rated_point_sum"])))
@@ -99,8 +99,12 @@ def post_message(message: dict) -> None:
     """Slackに指定したblocksをメッセージとして投稿する"""
     data = json.dumps(message).encode()
     headers = {"Content-type": "application/json"}
+    url = os.getenv(SLACK_URL_ENV_NAME)
+    if url is None:
+        print(f"[ERROR] Environment variable does not exist: {SLACK_URL_ENV_NAME}")
+        return
     req = request.Request(
-        url=os.getenv("SLACK_INCOMING_WEBHOOK_URL"),
+        url=url,
         data=data,
         headers=headers)
     request.urlopen(req)

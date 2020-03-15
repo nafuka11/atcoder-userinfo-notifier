@@ -16,7 +16,7 @@ def main(user_list_file: str) -> None:
 
 def fetch_atcoder_userinfos(user_list_file: str) -> List[dict]:
     """ユーザIDリストファイルから成績を取得する"""
-    userinfos = list()
+    userinfos: List[dict] = list()
     try:
         userids = read_userid_list(user_list_file)
     except IOError as e:
