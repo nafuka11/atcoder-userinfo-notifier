@@ -33,7 +33,7 @@ class TestPostSlackFromUserinfo:
             mock_slack_api (MagicMock): urlopen()のモックオブジェクト
 
         """
-        userinfo = list()
+        userinfo: List[dict] = list()
         now_date = date(2222, 4, 2)
         post_slack_from_userinfo(userinfo, now_date)
 

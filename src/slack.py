@@ -48,7 +48,7 @@ def header_block(now_date: date) -> dict:
 
 def ac_ranking_blocks(userinfos: List[dict]) -> List[dict]:
     """Slackに投稿するメッセージのAC数ランキング部分を返す"""
-    blocks = list()
+    blocks: List[dict] = list()
 
     # header
     block = {
@@ -61,7 +61,7 @@ def ac_ranking_blocks(userinfos: List[dict]) -> List[dict]:
     blocks.append(block)
 
     # user ranking
-    fields = list()
+    fields: List[dict] = list()
     users = sorted(userinfos, key=lambda u: u["accepted_count"], reverse=True)[:MAX_USER_COUNT]
     max_ac_digit = len(str(users[0]["accepted_count"]))
     max_point_digit = len(str(int(users[0]["rated_point_sum"])))
