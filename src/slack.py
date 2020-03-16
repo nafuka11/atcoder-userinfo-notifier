@@ -14,6 +14,7 @@ NUM_DICT = {
 }
 SLACK_URL_ENV_NAME = "SLACK_INCOMING_WEBHOOK_URL"
 
+
 def post_slack_from_userinfo(userinfos: List[dict], now_date: date) -> None:
     """SlackにAtCoderの成績ランキングを投稿する"""
     # ユーザが存在しない場合は、投稿しない
