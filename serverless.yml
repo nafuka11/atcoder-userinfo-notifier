@@ -7,8 +7,11 @@ provider:
 
 package:
   exclude:
-    - userlist_example.txt
-    - tests/**
+    - ./**
+  include:
+    - src/*.py
+    - handler.py
+    - userlist.txt
 
 functions:
   atcoder-userinfo-notifier:
