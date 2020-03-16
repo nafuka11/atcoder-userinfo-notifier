@@ -1,7 +1,9 @@
 import pytest
 from pathlib import Path
 from pytest_mock import MockFixture
-from src.main import *
+from typing import List
+from urllib.error import HTTPError
+from src.main import fetch_atcoder_userinfos, read_userid_list
 
 
 @pytest.fixture
