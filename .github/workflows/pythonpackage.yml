@@ -37,3 +37,12 @@ jobs:
       run: |
         pip install mypy
         mypy --ignore-missing-imports .
+    - name: Notify slack
+      uses: homoluctus/slatify@master
+      if: always()
+      with:
+        type: ${{ job.status }}
+        job_name: '*Test and Lint*'
+        url: ${{ secrets.SLACK_WEBHOOK }}
+        commit: true
+        token: ${{ secrets.GITHUB_TOKEN }}
