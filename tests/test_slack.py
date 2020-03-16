@@ -2,7 +2,10 @@ import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from pytest_mock import MockFixture
 from unittest.mock import MagicMock
-from src.slack import *
+from typing import List
+from datetime import date
+import json
+from src.slack import post_slack_from_userinfo, create_slack_message, post_message
 
 
 @pytest.fixture()
