@@ -29,6 +29,7 @@ AWS Lambda上で動作します。
        "ssm:GetParameters",
        "ssm:GetParameter"
        ```
+
 2. ssmの追加
    - ssmにSlackのIncoming Webhook URLを追加します。
 
@@ -43,7 +44,16 @@ AWS Lambda上で動作します。
      |KMS の主要なソース|現在のアカウント|
      |KMS キー ID|`alias/aws/ssm`|
      |値|（SlackのIncoming Webhook URL）|
-3. userlist.txtの編集
+
+3. リポジトリのclone
+
+   - 以下のコマンドを任意のディレクトリで実行し、リポジトリをローカルにコピーします。
+     ```bash
+     git clone https://github.com/nafuka11/atcoder-userinfo-notifier.git
+     ```
+
+4. userlist.txtの編集
+
    1. `userlist_example.txt` を`userlist.txt` にリネーム
 
       ```bash
@@ -53,12 +63,14 @@ AWS Lambda上で動作します。
    2. `userlist.txt` の編集
 
       - AtCoderのuseridを改行区切りで記入してください。末尾に改行は不要です。
-4. 動作確認
+
+5. 動作確認
    - 以下のコマンドを実行し、Slackのチャンネルにメッセージが投稿されることを確認します。
      ```bash
      sls invoke local -f atcoder-userinfo-notifier
      ```
-5. serverless.ymlの編集
+
+6. serverless.ymlの編集
    - `- schedule: ` の行を編集することで、通知時刻を変更できます。
 
      例：UTC 0:42（JST 9:42）に通知する場合
@@ -69,7 +81,8 @@ AWS Lambda上で動作します。
        - [Rate または Cron を使用したスケジュール式 - AWS Lambda](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html)
 
      ※ 外部APIにアクセスするので頻繁な設定はくれぐれも控えてください。
-6. デプロイ
+
+7. デプロイ
    -  ```bash
       sls deploy
       ```
